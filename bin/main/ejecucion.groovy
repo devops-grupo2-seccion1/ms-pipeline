@@ -7,7 +7,7 @@ def call(){
             NEXUS_USER         = credentials('NEXUS-USER')
             NEXUS_PASSWORD     = credentials('NEXUS-PASS')
         }
-        def utils  = new test.validateUtility();
+        def utils  = new test.ValidateUtility()
         stages {
             stage("Pipeline"){
                 steps {
