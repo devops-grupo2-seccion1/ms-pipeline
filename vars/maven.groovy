@@ -91,9 +91,4 @@ def gitTagMaster(){
 
 }
 
-
-
-'gitDiff','nexusDownload','run','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'
-
-
 return this;
