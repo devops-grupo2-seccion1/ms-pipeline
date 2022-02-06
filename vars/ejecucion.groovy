@@ -19,13 +19,4 @@ def call(){
     }
 }
 
-
-def verifyBranchName(){
-	if(env.GIT_BRANCH.contains('feature-') || env.GIT_BRANCH.contains('develop')) {
-		return 'CI'
-	} else {
-		return 'CD'
-	}
-}
-
 return this;
