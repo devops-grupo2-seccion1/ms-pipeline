@@ -19,7 +19,7 @@ def call(){
                         def archivo = (params.buildtool == 'gradle') ? 'build.gradle' : 'pom.xml'
 
                         if (fileExists(archivo)){
-                           
+                            "${params.buildtool}"
                         } else {
                             error "archivo ${archivo} no existe. No se puede construir pipeline basado en ${params.buildtool}"
                         }
