@@ -15,7 +15,7 @@ def call(){
                         if (fileExists('pom.xml')){
                             figlet params.buildtool
                             "${buildtool}" "${params.stages}"
-                        }   else{
+                        }else{
                             error "archivo ${archivo} no existe. No se puede construir pipeline basado en ${params.buildtool}"
                         }
                     }
