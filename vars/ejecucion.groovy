@@ -14,9 +14,6 @@ def call(){
                         figlet env.GIT_BRANCH
                     }
                 }
-                post{
-                    figlet 'Finalizado Pipeline'
-                }
             }
         }
     }
