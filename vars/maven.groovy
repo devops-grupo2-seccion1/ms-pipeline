@@ -23,16 +23,16 @@ def compile(){
 }
 
 def unitTest(){
-    sh './mvn clean test -e'
+    sh './mvnw clean test -e'
 }
 
 def jar(){
-    sh './mvn clean package -e'
+    sh './mvnw clean package -e'
 }
 
 def sonar(){
     withSonarQubeEnv('sonarqube') {
-        sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=ms-iclab-${env.GIT_BRANCH} -Dsonar.java.binaries=build'
+        sh 'mvnw clean verify sonar:sonar -Dsonar.projectKey=ms-iclab-${env.GIT_BRANCH} -Dsonar.java.binaries=build'
     }
 }
 
