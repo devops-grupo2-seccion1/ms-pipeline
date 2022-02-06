@@ -7,12 +7,12 @@ def call(){
             NEXUS_USER         = credentials('NEXUS-USER')
             NEXUS_PASSWORD     = credentials('NEXUS-PASS')
         }
-
+        def utils  = new test.validateUtility();
         stages {
             stage("Pipeline"){
                 steps {
                     script{
-                        def utils  = new test.validateUtility()
+                        
                         utils.isCIorCD()
                     }
                 }
