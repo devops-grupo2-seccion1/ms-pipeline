@@ -17,17 +17,16 @@ def getValidatedStages(String chosenStages, ArrayList pipelineStages){
 		stages = pipelineStages
 		println "Parámetro de stages vacío. Se ejecutarán todos los stages en el siguiente orden: ${stages}"
 	}
-
 	return stages
 }
 
 def isCIorCD(){
 	if (env.GIT_BRANCH.contains('develop') || env.GIT_BRANCH.contains('feature')){
 		figlet 'Integracion Continua'
-		return 'ci'
+		return 'CI'
 	} else {
 		figlet 'Entrega Continua'
-		return 'cd'
+		return 'CD'
 	}
 }
 
