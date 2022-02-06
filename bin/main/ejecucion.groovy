@@ -1,5 +1,3 @@
-import pipeline.*
-
 def call(){
     pipeline {
         agent any
@@ -7,13 +5,11 @@ def call(){
             NEXUS_USER         = credentials('NEXUS-USER')
             NEXUS_PASSWORD     = credentials('NEXUS-PASS')
         }
-        def utils  = new test.ValidateUtility()
         stages {
             stage("Pipeline"){
                 steps {
                     script{
-                        
-                        utils.isCIorCD()
+                         maven.call()
                     }
                 }
             }

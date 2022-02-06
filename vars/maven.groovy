@@ -1,17 +1,11 @@
 import pipeline.*
 
-def call(String chosenStages){
+def call(){
 
     def utils  = new test.ValidateUtility()
-
     stages.each{
-        stage(it){
-            try {
-                "${it}"()
-            }
-            catch(Exception e) {
-                error "Stage ${it} tiene problemas: ${e}"
-            }
+        stage('test'){
+            utils.isCIorCD()
         }
     }
 }
