@@ -1,3 +1,5 @@
+import pipeline.*
+
 def call(){
     pipeline {
         agent any
@@ -10,8 +12,8 @@ def call(){
             stage("Pipeline"){
                 steps {
                     script{
-                        //def ci_or_cd = verifyBranchName()
-                        figlet env.GIT_BRANCH
+                        def utils  = new test.validateUtility()
+                        utils.isCIorCD()
                     }
                 }
             }
