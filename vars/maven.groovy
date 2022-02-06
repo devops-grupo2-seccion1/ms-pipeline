@@ -19,7 +19,7 @@ def call(String chosenStages){
 
 // funciones para CI
 def compile(){
-    sh './mvn clean compile -e'
+    sh './mvnw clean compile -e'
 }
 
 def unitTest(){
