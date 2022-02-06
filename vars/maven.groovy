@@ -1,13 +1,8 @@
 import pipeline.*
 
 def call(String chosenStages){
-
-    
-
     def utils  = new test.UtilMethods()
-    figlet utils.isCIorCD()
-    /*def pipelineStages = (utils.isCIorCD().contains('ci')) ? ['compile','test','jar','sonar','runJar','rest','nexusCI','crearRelease'] : ['downloadNexus','runDownloadedJar','rest','nexusCD'] 
-
+    def pipelineStages = (utils.isCIorCD().contains('ci')) ? ['compile','test','jar','sonar','runJar','rest','nexusCI','crearRelease'] : ['downloadNexus','runDownloadedJar','rest','nexusCD'] 
     def stages = utils.getValidatedStages(chosenStages, pipelineStages)
 
     stages.each{
