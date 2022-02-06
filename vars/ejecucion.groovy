@@ -26,13 +26,13 @@ def call(){
 
                     }
                 }
-            }
-            post{
-                success{
-                    slackSend color: 'good', message: "[Grupo2][Pipeline IC][Rama: ${env.GIT_BRANCH}][Stage: ${params.stages}][Resultado: Ok]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'token-jenkins-slack'
-                }
-                failure{
-                    slackSend color: 'danger', message: "[Grupo2][Pipeline IC][Rama: ${env.GIT_BRANCH}][Stage: ${params.stages}][Resultado: Ok]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'token-jenkins-slack'
+                post{
+                    success{
+                        slackSend color: 'good', message: "[Grupo2][Pipeline IC][Rama: ${env.GIT_BRANCH}][Stage: ${params.stages}][Resultado: Ok]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'token-jenkins-slack'
+                    }
+                    failure{
+                        slackSend color: 'danger', message: "[Grupo2][Pipeline IC][Rama: ${env.GIT_BRANCH}][Stage: ${params.stages}][Resultado: Error]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'token-jenkins-slack'
+                    }
                 }
             }
         }
