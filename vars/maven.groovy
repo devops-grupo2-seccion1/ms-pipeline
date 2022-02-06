@@ -1,6 +1,7 @@
 import pipeline.*
 
 def call(String chosenStages){
+    env.PIPELINE_INTEGRATIONS = utils.isCIorCD();
     def utils  = new test.UtilMethods()
     def pipelineStages = (utils.isCIorCD().contains('CI')) ? ['compile','unitTest','jar','sonar','nexusUpload','gitCreateRelease'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
     def stages = utils.getValidatedStages(chosenStages, pipelineStages)
@@ -42,9 +43,7 @@ def nexusUpload(){
 
 def gitCreateRelease(){
     if (env.GIT_BRANCH.contains('develop')){
-        
         def git = new git.GitMethods()
-
         if (git.checkIfBranchExists('release-v1-0-0')){
             println 'La rama existe'
             git.deleteBranch('release-v1-0-0')
@@ -67,11 +66,11 @@ def gitDiff(){
 }
 
 def nexusDownload(){
-    sh "curl -X GET -u admin:admin http://localhost:8081/repository/test-nexus/com/devopsusach2020/DevOpsUsach2020/0.0.1-develop/DevOpsUsach2020-0.0.1-develop.jar -O"
+    sh ' curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD "http://nexus:8081/repository/devops-usach-nexus/com/devopsusach2020/DevOpsUsach2020/0.0.1/DevOpsUsach2020-0.0.1.jar" -O'
 }
 
 def runArtefact(){
-    sh "nohup java -jar DevOpsUsach2020-0.0.1-develop.jar &"
+    sh 'nohup bash java -jar DevOpsUsach2020-0.0.1.jar & >/dev/null'
     sleep 20
 }
 
