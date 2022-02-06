@@ -1,8 +1,8 @@
 import pipeline.*
 
 def call(String chosenStages){
-    env.PIPELINE_INTEGRATIONS = utils.isCIorCD();
     def utils  = new test.UtilMethods()
+    env.PIPELINE_INTEGRATIONS = utils.isCIorCD();
     def pipelineStages = (utils.isCIorCD().contains('CI')) ? ['compile','unitTest','jar','sonar','nexusUpload','gitCreateRelease'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
     def stages = utils.getValidatedStages(chosenStages, pipelineStages)
 
