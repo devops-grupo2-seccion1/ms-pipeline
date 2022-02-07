@@ -49,7 +49,28 @@ def sonar(){
 }
 
 def nexusUpload(){
-    nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'test-nexus', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'jar', filePath: "build/DevOpsUsach2020-0.0.1.jar"]], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: "0.0.1-${env.GIT_BRANCH}"]]]  
+        pom = readMavenPom(file: 'pom.xml')
+        def src = GIT_BRANCH.split("\\/")
+        def folder = src[0]
+        def rama = src[1]
+        nexusPublisher nexusInstanceId: 'nexus',
+        nexusRepositoryId: 'devops-usach-nexus',  // REPOSITORIO!!!!!
+        packages: [
+            [$class: 'MavenPackage',
+                mavenAssetList: [
+                    [classifier: '',
+                    extension: 'jar',
+                    filePath: "build/"+pom.artifactId+"-"+pom.version+".jar"
+                ]
+            ],
+                mavenCoordinate: [
+                    artifactId: pom.artifactId+"-"+rama,
+                    groupId: pom.groupId,
+                    packaging: 'jar',
+                    version: pom.version
+                ]
+            ]
+        ]
 }
 
 def gitCreateRelease(){
