@@ -2,7 +2,7 @@ import pipeline.*
 
 def call(String chosenStages){
     def utils  = new test.UtilMethods()
-    def pipelineStages = (utils.isCIorCD().contains('CI')) ? ['gitMergeMaster'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
+    def pipelineStages = (utils.isCIorCD().contains('CI')) ? ['compile','unitTest','jar','sonar','nexusUpload'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
     def stages = utils.getValidatedStages(chosenStages, pipelineStages)
 
     env.PIPELINE_INTEGRATIONS = utils.isCIorCD();
@@ -45,7 +45,17 @@ def nexusUpload(){
 def gitCreateRelease(){
     def git = new git.GitMethods()
     if (env.GIT_BRANCH.contains('develop')){
-        
+        def git = new git.GitMethods()
+        if (git.checkIfBranchExists('release-v1-0-0')){
+            println 'La rama existe'
+            git.deleteBranch('release-v1-0-0')
+            println 'Rama eliminada. Se crea nuevamente.'
+            git.createBranch(env.GIT_BRANCH,'release-v1-0-0')
+            println 'Rama creada con éxito.'
+        } else {
+            git.createBranch(env.GIT_BRANCH,'release-v1-0-0')
+            println 'Rama creada con éxito.'
+        }
     }else if(env.GIT_BRANCH.contains('feature')){
         
     }else{
@@ -73,14 +83,27 @@ def test(){
 }
 
 def gitMergeMaster(){
-    echo env.WORKSPACE
-    sh "cd ${env.WORKSPACE}"
-    sh "ls -la"
-    sh "git push origin release"
+     if (env.GIT_BRANCH.contains('release')){
+        sh "cd ${env.WORKSPACE}"
+        sh "git checkout main"
+        sh "git pull"
+        sh "git merge ${env.GIT_BRANCH}"
+        sh "git push origin main"
+    }else{
+        println "No existe nada que mergear a main de la rama ${env.GIT_BRANCH}"
+    }
 }
 
 def gitMergeDevelop(){
-
+    if (env.GIT_BRANCH.contains('release')){
+        sh "cd ${env.WORKSPACE}"
+        sh "git checkout develop"
+        sh "git pull"
+        sh "git merge ${env.GIT_BRANCH}"
+        sh "git push origin develop"
+    }else{
+        println "No existe nada que mergear a develop de la rama ${env.GIT_BRANCH}"
+    }
 }
 
 def gitTagMaster(){
