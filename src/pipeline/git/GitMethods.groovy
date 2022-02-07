@@ -28,7 +28,7 @@ def createPullRequest(String origin, String branch){
 	sh '''
 		git fetch -p 
 		git checkout '''+branch+'''; git pull
-		git request-pull  '''+branch+''
+		git request-pull  '''+branch+'''
 	'''
 }
 
