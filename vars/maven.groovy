@@ -128,7 +128,7 @@ def gitMergeMaster(){
      if (env.GIT_BRANCH.contains('release')){
         sh "cd ${env.WORKSPACE}"
         sh "git checkout main"
-        sh "git pull"
+        sh "git pull origin main"
         sh "git merge ${env.GIT_BRANCH}"
         sh "git push origin main"
     }else{
@@ -140,7 +140,7 @@ def gitMergeDevelop(){
     if (env.GIT_BRANCH.contains('release')){
         sh "cd ${env.WORKSPACE}"
         sh "git checkout develop"
-        sh "git pull"
+        sh "git pull origin develop"
         sh "git merge ${env.GIT_BRANCH}"
         sh "git push origin develop"
     }else{
