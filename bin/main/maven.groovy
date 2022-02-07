@@ -69,27 +69,27 @@ def runArtefact(){
 }
 
 def test(){
-        def continuar=true
-        def intento=0
-        def intentoMax=5
-        while(continuar){
-            intento++
-            try {
-                sh "curl -X GET 'http://localhost:8080/rest/mscovid/test?msg=testing'  >> /dev/null "
+    def continuar=true
+    def intento=0
+    def intentoMax=5
+    while(continuar){
+        intento++
+        try {
+            sh "curl -X GET 'http://localhost:8080/rest/mscovid/test?msg=testing'  >> /dev/null "
+            continuar=false
+            sh "echo '#### ARRANCADO Intento:${intento}'"
+        } catch (Exception e){
+            sh "echo '#### AUN NO ARRANCA intento:${intento}'"
+            if(intento>intentoMax){
                 continuar=false
-                sh "echo '#### ARRANCADO Intento:${intento}'"
-            } catch (Exception e){
-                sh "echo '#### AUN NO ARRANCA intento:${intento}'"
-                if(intento>intentoMax){
-                    continuar=false
-                    sh "echo '#### Fail intento:${intento}'"
-                    throw new Exception("Se demoro mucho en arrancar")
-                } else {
-                    sh "sleep 5"
-                }
+                sh "echo '#### Fail intento:${intento}'"
+                throw new Exception("Se demoro mucho en arrancar")
+            } else {
+                sh "sleep 5"
             }
         }
     }
+}
 
 def gitMergeMaster(){
 
