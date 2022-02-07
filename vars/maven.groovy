@@ -73,7 +73,8 @@ def test(){
 }
 
 def gitMergeMaster(){
-    sh "git checkout ${env.GIT_BRANCH}; git pull"
+    sh "git checkout ${env.GIT_BRANCH}"
+    sh "git pull ${env.GIT_BRANCH}"
 }
 
 def gitMergeDevelop(){
