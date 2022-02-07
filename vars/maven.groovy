@@ -55,7 +55,7 @@ def gitCreateRelease(){
 
 // funciones para CD
 def gitDiff(){
-    sh "git diff --name-only origin/main..origin/${env.GIT_BRANCH}"
+    sh "git diff --name-only origin/main..${env.GIT_BRANCH}"
 }
 
 def nexusDownload(){
