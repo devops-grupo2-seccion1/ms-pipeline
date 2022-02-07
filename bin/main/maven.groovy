@@ -75,6 +75,7 @@ def test(){
 def gitMergeMaster(){
     echo env.WORKSPACE
     sh "cd ${env.WORKSPACE}"
+    sh "git status"
 }
 
 def gitMergeDevelop(){
