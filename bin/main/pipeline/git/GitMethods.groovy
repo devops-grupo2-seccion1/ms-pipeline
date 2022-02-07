@@ -19,11 +19,8 @@ def createBranch(String origin, String newBranch, String tag){
 	sh "git branch -d ${newBranch}"
 	sh "git checkout ${origin}"
 	sh "git pull origin ${origin}"
-
-	sh "git tag v1.0.1"
-	sh "git push origin v1.0.0"
-/* 	sh "git checkout -b ${newBranch}"
-	sh "git push origin ${newBranch}" */
+	sh "git checkout -b ${newBranch}"
+	sh "git push origin ${newBranch}"
 }
 
 def createPullRequest(String origin, String branch){
