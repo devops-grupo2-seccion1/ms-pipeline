@@ -114,7 +114,7 @@ def nexusDownload(){
     println("${folder}-|-${rama}-|-${pom.artifactId}-|-${carpeta}")
     def urlx = "http://localhost:10001/repository/devops-usach-nexus/com/${carpeta}/${pom.artifactId}-${rama}/${pom.version}/${pom.artifactId}-${rama}-${pom.version}.jar"
     println(urlx)
-    sh " curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD '${urlx}'  -O"
+    sh " curl -X GET '${urlx}'  -O"
 }
 
 def runArtefact(){
