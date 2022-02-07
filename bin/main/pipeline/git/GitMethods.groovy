@@ -20,6 +20,7 @@ def createBranch(String origin, String newBranch, String tag){
 	sh "git checkout ${origin}"
 	sh "git pull origin ${origin}"
 	sh "git checkout -b ${newBranch}"
+	sh "git branch --set-upstream-to=${newBranch} ${newBranch}"
 	sh "git tag ${tag} -a"
 	sh "git push origin ${newBranch}"
 }
