@@ -20,7 +20,7 @@ def createBranch(String origin, String newBranch, String tag){
 	sh "git checkout ${origin}"
 	sh "git pull origin ${origin}"
 	sh "git checkout -b ${newBranch}"
-	sh "git push origin ${newBranch} ${tag}"
+	sh "git push origin ${newBranch}"
 }
 
 def createPullRequest(String origin, String branch){
