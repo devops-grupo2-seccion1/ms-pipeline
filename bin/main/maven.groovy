@@ -112,7 +112,7 @@ def nexusDownload(){
     def rama = src[1]
     def carpeta=(pom.artifactId).toLowerCase()
     println("${folder}-|-${rama}-|-${pom.artifactId}-|-${carpeta}")
-    def urlx = "http://localhost:10001/repository/devops-usach-nexus/com/${carpeta}/${pom.artifactId}-${rama}/${pom.version}/${pom.artifactId}-${rama}-${pom.version}.jar"
+    def urlx = "http://nexus:8081/repository/devops-usach-nexus/com/${carpeta}/${pom.artifactId}-${rama}/${pom.version}/${pom.artifactId}-${rama}-${pom.version}.jar"
     println(urlx)
     sh " curl -X GET '${urlx}'  -O"
 }
