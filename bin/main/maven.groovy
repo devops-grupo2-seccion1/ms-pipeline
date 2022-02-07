@@ -76,18 +76,24 @@ def nexusUpload(){
 def gitCreateRelease(){
     def git = new git.GitMethods()
     if (env.GIT_BRANCH.contains('develop')){
-        if (git.checkIfBranchExists('release-v1-0-0')){
+        pom = readMavenPom(file: 'pom.xml')
+        env.VERSION_EXCUTE = (pom.version).replace(".", "-")
+        if (git.checkIfBranchExists('release-v' + env.VERSION_EXCUTE)){
             println 'La rama existe'
-            git.deleteBranch('release-v1-0-0')
+            git.deleteBranch('release-v' + env.VERSION_EXCUTE)
             println 'Rama eliminada. Se crea nuevamente.'
-            git.createBranch(env.GIT_BRANCH,'release-v1-0-0')
+            git.createBranch(env.GIT_BRANCH,'release-v' + env.VERSION_EXCUTE)
             println 'Rama creada con éxito.'
         } else {
-            git.createBranch(env.GIT_BRANCH,'release-v1-0-0')
+            git.createBranch(env.GIT_BRANCH,'release-v' + env.VERSION_EXCUTE)
             println 'Rama creada con éxito.'
         }
     }else if(env.GIT_BRANCH.contains('feature')){
-        
+        sh "cd ${env.WORKSPACE}"
+        sh "git checkout develop"
+        sh "git pull"
+        sh "git merge ${env.GIT_BRANCH}"
+        sh "git push origin develop"
     }else{
         println "La rama ${env.GIT_BRANCH} no corresponde como rama de orígen para la creación de un Release."
     }
@@ -110,6 +116,7 @@ def runArtefact(){
 
 def test(){
     sh "curl -X GET http://localhost:8080/rest/mscovid/test?msg=testing"
+    sh "curl -X GET http://localhost:8080/rest/mscovid/estadoMundial?msg=testing"
 }
 
 def gitMergeMaster(){
