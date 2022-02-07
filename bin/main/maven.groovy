@@ -142,7 +142,7 @@ def gitMergeDevelop(){
         sh "git checkout develop"
         sh "git pull origin develop"
         sh "git merge ${env.GIT_BRANCH}"
-        sh "git push origin develop"
+        sh "git push -f origin develop"
     }else{
         println "No existe nada que mergear a develop de la rama ${env.GIT_BRANCH}"
     }
