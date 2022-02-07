@@ -55,7 +55,10 @@ def gitCreateRelease(){
 
 // funciones para CD
 def gitDiff(){
-    sh "git status"
+    sh "git fetch -p "
+    sh "git checkout main; git pull "
+    sh "git checkout ${env.GIT_BRANCH}; git pull "
+    sh "git diff main ${env.GIT_BRANCH}"
 }
 
 def nexusDownload(){
