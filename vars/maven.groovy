@@ -122,7 +122,7 @@ def runArtefact(){
     def src = GIT_BRANCH.split("\\/")
     def folder = src[0]
     def rama = src[1]
-    sh "nohup bash java -jar ${pom.artifactId}-${rama}-${pom.version}.jar & >/dev/null"
+    sh "nohup java -jar ${pom.artifactId}-${rama}-${pom.version}.jar & >/dev/null"
     sleep 20
 }
 
