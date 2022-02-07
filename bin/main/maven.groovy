@@ -2,7 +2,7 @@ import pipeline.*
 
 def call(String chosenStages){
     def utils  = new test.UtilMethods()
-    def pipelineStages = (utils.isCIorCD().contains('CI')) ? ['compile','unitTest','jar','sonar','nexusUpload','gitCreateRelease'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
+    def pipelineStages = (utils.isCIorCD().contains('CI')) ? [/* 'compile','unitTest','jar','sonar','nexusUpload', */'gitDiff'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
     def stages = utils.getValidatedStages(chosenStages, pipelineStages)
 
     env.PIPELINE_INTEGRATIONS = utils.isCIorCD();
@@ -43,27 +43,24 @@ def nexusUpload(){
 }
 
 def gitCreateRelease(){
+    def git = new git.GitMethods()
     if (env.GIT_BRANCH.contains('develop')){
-        def git = new git.GitMethods()
-        if (git.checkIfBranchExists('release-v1-0-0')){
-            println 'La rama existe'
-            git.deleteBranch('release-v1-0-0')
-            println 'Rama eliminada. Se crea nuevamente.'
-            git.createBranch(env.GIT_BRANCH,'release-v1-0-0')
-            println 'Rama creada con éxito.'
-        } else {
-            git.createBranch(env.GIT_BRANCH,'release-v1-0-0')
-            println 'Rama creada con éxito.'
-        }
-
-    } else {
+        
+    }else if(env.GIT_BRANCH.contains('feature')){
+        
+    }else{
         println "La rama ${env.GIT_BRANCH} no corresponde como rama de orígen para la creación de un Release."
     }
 }
 
 // funciones para CD
 def gitDiff(){
-
+    sh '''
+		git fetch -p 
+		git checkout main; git pull
+		git checkout '''${env.GIT_BRANCH}'''; git pull
+        git diff main '''${env.GIT_BRANCH}''';
+	'''
 }
 
 def nexusDownload(){

@@ -24,4 +24,12 @@ def createBranch(String origin, String newBranch){
 	'''
 }
 
+def createPullRequest(String branch){
+	sh '''
+		git fetch -p 
+		git checkout '''+branch+'''; git pull
+		git request-pull develop
+	'''
+}
+
 return this;
