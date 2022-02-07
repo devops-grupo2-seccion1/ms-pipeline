@@ -17,6 +17,7 @@ def createBranch(String origin, String newBranch, String tag){
 	sh "cd ${env.WORKSPACE}"
 	sh "git checkout ${origin}"
 	sh "git pull origin ${origin}"
+	sh "git --delete ${newBranch}"
 	sh "git checkout -b ${newBranch}"
 	sh "git push origin ${newBranch} ${tag}"
 }
