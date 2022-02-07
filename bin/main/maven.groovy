@@ -69,7 +69,7 @@ def runArtefact(){
 }
 
 def test(){
-    def continuar=true
+        def continuar=true
         def intento=0
         def intentoMax=5
         while(continuar){
@@ -87,8 +87,9 @@ def test(){
                 } else {
                     sh "sleep 5"
                 }
+            }
+        }
     }
-}
 
 def gitMergeMaster(){
 
