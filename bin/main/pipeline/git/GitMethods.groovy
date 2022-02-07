@@ -13,7 +13,7 @@ def deleteBranch(String branch){
 	sh "git push origin --delete ${branch}"
 }
 
-def createBranch(String origin, String newBranch){
+def createBranch(String origin, String newBranch, String tag){
 	sh '''
 		git fetch -p 
 		git checkout '''+origin+'''; git pull

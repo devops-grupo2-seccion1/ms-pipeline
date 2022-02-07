@@ -3,7 +3,7 @@ import pipeline.*
 def call(String chosenStages){
     def utils  = new test.UtilMethods()
     //def pipelineStages = (utils.isCIorCD().contains('CI')) ? ['compile','unitTest','jar','sonar','nexusUpload'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
-    def pipelineStages = (utils.isCIorCD().contains('CI')) ? ['jar', 'nexusUpload'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
+    def pipelineStages = (utils.isCIorCD().contains('CI')) ? ['nexusDownload'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
     def stages = utils.getValidatedStages(chosenStages, pipelineStages)
 
     env.PIPELINE_INTEGRATIONS = utils.isCIorCD();
@@ -82,10 +82,10 @@ def gitCreateRelease(){
             println 'La rama existe'
             git.deleteBranch('release-v' + env.VERSION_EXCUTE)
             println 'Rama eliminada. Se crea nuevamente.'
-            git.createBranch(env.GIT_BRANCH,'release-v' + env.VERSION_EXCUTE)
+            git.createBranch(env.GIT_BRANCH,'release-v' + env.VERSION_EXCUTE, env.VERSION_EXCUTE)
             println 'Rama creada con éxito.'
         } else {
-            git.createBranch(env.GIT_BRANCH,'release-v' + env.VERSION_EXCUTE)
+            git.createBranch(env.GIT_BRANCH,'release-v' + env.VERSION_EXCUTE, env.VERSION_EXCUTE)
             println 'Rama creada con éxito.'
         }
     }else if(env.GIT_BRANCH.contains('feature')){
@@ -106,7 +106,15 @@ def gitDiff(){
 }
 
 def nexusDownload(){
-    sh ' curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD "http://nexus:8081/repository/devops-usach-nexus/com/devopsusach2020/DevOpsUsach2020/0.0.1/DevOpsUsach2020-0.0.1.jar" -O'
+    pom = readMavenPom(file: 'pom.xml')
+    def src = GIT_BRANCH.split("\\/")
+    def folder = src[0]
+    def rama = src[1]
+    def carpeta=(pom.artifactId).toLowerCase()
+    println("${folder}-|-${rama}-|-${pom.artifactId}-|-${carpeta}")
+    def urlx = "http://localhost:10001/repository/devops-usach-nexus/com/${carpeta}/${pom.artifactId}-${rama}/${pom.version}/${pom.artifactId}-${rama}-${pom.version}.jar"
+    println(urlx)
+    //sh ' curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD "http://nexus:8081/repository/devops-usach-nexus/com/devopsusach2020/DevOpsUsach2020/0.0.1/DevOpsUsach2020-0.0.1.jar" -O'
 }
 
 def runArtefact(){
@@ -144,7 +152,9 @@ def gitMergeDevelop(){
 }
 
 def gitTagMaster(){
-
+    sh "git checkout main"
+    sh "git tag ${env.VERSION_EXCUTE} -a"
+    sh "git push origin --tags"
 }
 
 return this;
