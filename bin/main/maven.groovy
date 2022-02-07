@@ -35,19 +35,17 @@ def jar(){
 }
 
 def sonar(){
-   def src = GIT_BRANCH.split("\\/")
-   def folder = src[0]
-   def rama = src[1]
-   def build = BUILD_NUMBER
-   def repox =GIT_URL.split("\\/")
-   def repo = repox[repox.length-1].replace(".git","")
-   def nombre="${repo}-${rama}-${build}"
-   def pkey="${repo}-${rama}"
-   stage(env.stageName){
-      withSonarQubeEnv('sonarqube') {
-         sh "mvnw clean verify sonar:sonar -Dsonar.projectKey=${pkey} -Dsonar.projectName=${nombre}"
-      }
-   }
+    def src = GIT_BRANCH.split("\\/")
+    def folder = src[0]
+    def rama = src[1]
+    def build = BUILD_NUMBER
+    def repox =GIT_URL.split("\\/")
+    def repo = repox[repox.length-1].replace(".git","")
+    def nombre="${repo}-${rama}-${build}"
+    def pkey="${repo}-${rama}"
+    withSonarQubeEnv('sonarqube') {
+        sh "mvnw clean verify sonar:sonar -Dsonar.projectKey=${pkey} -Dsonar.projectName=${nombre}"
+    }
 }
 
 def nexusUpload(){
