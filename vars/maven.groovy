@@ -152,7 +152,7 @@ def gitTagMaster(){
     pom = readMavenPom(file: 'pom.xml')
     def version = 'v' + pom.version
     sh "git checkout main"
-    sh "git tag ${version} -a"
+    sh "git tag -fa ${version} -m 'add tag'"
     sh "git push origin --tags"
 }
 
