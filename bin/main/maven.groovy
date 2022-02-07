@@ -55,7 +55,7 @@ def gitCreateRelease(){
 
 // funciones para CD
 def gitDiff(){
-    sh `git status;`
+    sh `'git status'`
 }
 
 def nexusDownload(){
