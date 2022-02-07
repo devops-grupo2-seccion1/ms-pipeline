@@ -10,6 +10,7 @@ def call(String chosenStages){
     stages.each{
         stage(it){
             try {
+                figlet "Stage ${it}"
                 "${it}"()
             }
             catch(Exception e) {
@@ -45,7 +46,6 @@ def nexusUpload(){
 def gitCreateRelease(){
     def git = new git.GitMethods()
     if (env.GIT_BRANCH.contains('develop')){
-        def git = new git.GitMethods()
         if (git.checkIfBranchExists('release-v1-0-0')){
             println 'La rama existe'
             git.deleteBranch('release-v1-0-0')
