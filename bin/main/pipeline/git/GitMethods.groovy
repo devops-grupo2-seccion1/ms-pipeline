@@ -19,14 +19,13 @@ def createBranch(String origin, String newBranch, String tag){
 	sh "git branch -d ${newBranch}"
 	sh "git checkout ${origin}"
 	sh "git pull origin ${origin}"
-
 	sh 'git config --global user.email "devopsusach@devopsusach.cl"'
   	sh 'git config --global user.name "GRUPO 2"'
-
 	sh "git checkout -b ${newBranch}"
+	sh "git push origin ${newBranch}"
 	sh "git branch --set-upstream-to=${newBranch} ${newBranch}"
 	sh "git tag ${tag} -a"
-	sh "git push origin ${newBranch}"
+	
 }
 
 def createPullRequest(String origin, String branch){
