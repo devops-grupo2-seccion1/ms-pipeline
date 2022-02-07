@@ -2,7 +2,7 @@ import pipeline.*
 
 def call(String chosenStages){
     def utils  = new test.UtilMethods()
-    def pipelineStages = (utils.isCIorCD().contains('CI')) ? ['compile','unitTest','jar','sonar','nexusUpload','gitCreateRelease'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitTagMaster'] 
+    def pipelineStages = (utils.isCIorCD().contains('CI')) ? ['compile','unitTest','jar','sonar','nexusUpload','gitCreateRelease'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
     def stages = utils.getValidatedStages(chosenStages, pipelineStages)
 
     env.PIPELINE_INTEGRATIONS = utils.isCIorCD();
@@ -149,8 +149,10 @@ def gitMergeDevelop(){
 }
 
 def gitTagMaster(){
+    pom = readMavenPom(file: 'pom.xml')
+    def version = 'v' + pom.version
     sh "git checkout main"
-    sh "git tag ${env.VERSION_EXCUTE} -a"
+    sh "git tag ${version} -a"
     sh "git push origin --tags"
 }
 
