@@ -55,6 +55,7 @@ def gitCreateRelease(){
 
 // funciones para CD
 def gitDiff(){
+    echo 'Diferencias con branch main'
     sh "git diff --name-only origin/main..${env.GIT_BRANCH}"
 }
 
