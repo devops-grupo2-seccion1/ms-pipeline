@@ -44,7 +44,7 @@ def sonar(){
     def nombre="${repo}-${rama}-${build}"
     def pkey="${repo}-${rama}"
     withSonarQubeEnv('sonarqube') {
-        sh "mvnw clean verify sonar:sonar -Dsonar.projectKey=${pkey} -Dsonar.projectName=${nombre}"
+        sh "mvn clean verify sonar:sonar -Dsonar.projectKey=${pkey} -Dsonar.projectName=${nombre}"
     }
 }
 
