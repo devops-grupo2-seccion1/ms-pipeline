@@ -24,9 +24,11 @@ def isCIorCD(){
 	if (env.GIT_BRANCH.contains('develop') || env.GIT_BRANCH.contains('feature')){
 		figlet 'Integracion Continua'
 		return 'CI'
-	} else {
+	} else if(env.GIT_BRANCH.contains('release')){
 		figlet 'Entrega Continua'
-		return 'CD'
+		return 'RELEASE'
+	}else{
+		error "Error rama ${env.GIT_BRANCH} no se puede procesar"
 	}
 }
 

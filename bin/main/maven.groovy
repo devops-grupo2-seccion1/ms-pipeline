@@ -2,7 +2,8 @@ import pipeline.*
 
 def call(String chosenStages){
     def utils  = new test.UtilMethods()
-    def pipelineStages = (utils.isCIorCD().contains('CI')) ? ['compile','unitTest','jar','sonar','nexusUpload'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
+    //def pipelineStages = (utils.isCIorCD().contains('CI')) ? ['compile','unitTest','jar','sonar','nexusUpload'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
+    def pipelineStages = (utils.isCIorCD().contains('CI')) ? ['sonar'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
     def stages = utils.getValidatedStages(chosenStages, pipelineStages)
 
     env.PIPELINE_INTEGRATIONS = utils.isCIorCD();
@@ -34,9 +35,20 @@ def jar(){
 }
 
 def sonar(){
-    withSonarQubeEnv('sonarqube') {
-        sh 'mvnw clean verify sonar:sonar -Dsonar.projectKey=ms-iclab-${env.GIT_BRANCH} -Dsonar.java.binaries=build'
-    }
+   def src = GIT_BRANCH.split("\\/")
+   def folder = src[0]
+   def rama = src[1]
+   def build = BUILD_NUMBER
+   def repox =GIT_URL.split("\\/")
+   def repo = repox[repox.length-1].replace(".git","")
+   def nombre="${repo}-${rama}-${build}"
+   def pkey="${repo}-${rama}"
+   comp = new compilador(compileTool)
+   stage(env.stageName){
+      withSonarQubeEnv('sonarqube') {
+         sh "mvnw clean verify sonar:sonar -Dsonar.projectKey=${pkey} -Dsonar.projectName=${nombre}"
+      }
+   }
 }
 
 def nexusUpload(){
