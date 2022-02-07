@@ -2,7 +2,7 @@ import pipeline.*
 
 def call(String chosenStages){
     def utils  = new test.UtilMethods()
-    def pipelineStages = (utils.isCIorCD().contains('CI')) ? [/* 'compile','unitTest','jar','sonar','nexusUpload', 'gitMergeMaster' */'runArtefact','test'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
+    def pipelineStages = (utils.isCIorCD().contains('CI')) ? ['runArtefact','test'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
     def stages = utils.getValidatedStages(chosenStages, pipelineStages)
 
     env.PIPELINE_INTEGRATIONS = utils.isCIorCD();
@@ -65,30 +65,11 @@ def nexusDownload(){
 
 def runArtefact(){
     sh 'nohup bash java -jar DevOpsUsach2020-0.0.1.jar & >/dev/null'
-    
+    sleep 20
 }
 
 def test(){
-    def continuar=true
-    def intento=0
-    def intentoMax=5
-    while(continuar){
-        intento++
-        try {
-            sh "curl -X GET 'http://localhost:8080/rest/mscovid/test?msg=testing'  >> /dev/null "
-            continuar=false
-            sh "echo '#### ARRANCADO Intento:${intento}'"
-        } catch (Exception e){
-            sh "echo '#### AUN NO ARRANCA intento:${intento}'"
-            if(intento>intentoMax){
-                continuar=false
-                sh "echo '#### Fail intento:${intento}'"
-                throw new Exception("Se demoro mucho en arrancar")
-            } else {
-                sh "sleep 5"
-            }
-        }
-    }
+    sh "curl -X GET http://localhost:8080/rest/mscovid/test?msg=testing"
 }
 
 def gitMergeMaster(){
