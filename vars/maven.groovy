@@ -76,7 +76,8 @@ def gitMergeMaster(){
     echo env.WORKSPACE
     sh "cd ${env.WORKSPACE}"
     sh "ls -la"
-    sh "git status"
+    sh "git checkout -b release"
+    sh "git push origin/release"
 }
 
 def gitMergeDevelop(){
