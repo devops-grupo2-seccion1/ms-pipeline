@@ -43,7 +43,6 @@ def sonar(){
    def repo = repox[repox.length-1].replace(".git","")
    def nombre="${repo}-${rama}-${build}"
    def pkey="${repo}-${rama}"
-   comp = new compilador(compileTool)
    stage(env.stageName){
       withSonarQubeEnv('sonarqube') {
          sh "mvnw clean verify sonar:sonar -Dsonar.projectKey=${pkey} -Dsonar.projectName=${nombre}"
