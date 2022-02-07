@@ -130,7 +130,7 @@ def gitMergeMaster(){
         sh "git checkout main"
         sh "git pull origin main"
         sh "git merge ${env.GIT_BRANCH}"
-        sh "git push origin main"
+        sh "git push -f origin main"
     }else{
         println "No existe nada que mergear a main de la rama ${env.GIT_BRANCH}"
     }
