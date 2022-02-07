@@ -2,8 +2,7 @@ import pipeline.*
 
 def call(String chosenStages){
     def utils  = new test.UtilMethods()
-    def pipelineStages = (utils.isCIorCD().contains('CI')) ? ['compile','unitTest','jar','sonar','nexusUpload'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
-    //def pipelineStages = (utils.isCIorCD().contains('CI')) ? ['nexusDownload', 'runArtefact', 'test'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
+    def pipelineStages = (utils.isCIorCD().contains('CI')) ? ['gitCreateRelease'/*,'compile','unitTest','jar','sonar','nexusUpload'*/] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
     def stages = utils.getValidatedStages(chosenStages, pipelineStages)
 
     env.PIPELINE_INTEGRATIONS = utils.isCIorCD();
@@ -82,10 +81,10 @@ def gitCreateRelease(){
             println 'La rama existe'
             git.deleteBranch('release-v' + env.VERSION_EXCUTE)
             println 'Rama eliminada. Se crea nuevamente.'
-            git.createBranch(env.GIT_BRANCH,'release-v' + env.VERSION_EXCUTE, env.VERSION_EXCUTE)
+            git.createBranch('develop','release-v' + env.VERSION_EXCUTE, env.VERSION_EXCUTE)
             println 'Rama creada con éxito.'
         } else {
-            git.createBranch(env.GIT_BRANCH,'release-v' + env.VERSION_EXCUTE, env.VERSION_EXCUTE)
+            git.createBranch('develop','release-v' + env.VERSION_EXCUTE, env.VERSION_EXCUTE)
             println 'Rama creada con éxito.'
         }
     }else{

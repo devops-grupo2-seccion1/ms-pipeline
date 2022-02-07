@@ -81,10 +81,10 @@ def gitCreateRelease(){
             println 'La rama existe'
             git.deleteBranch('release-v' + env.VERSION_EXCUTE)
             println 'Rama eliminada. Se crea nuevamente.'
-            git.createBranch(env.GIT_BRANCH,'release-v' + env.VERSION_EXCUTE, env.VERSION_EXCUTE)
+            git.createBranch('develop','release-v' + env.VERSION_EXCUTE, env.VERSION_EXCUTE)
             println 'Rama creada con éxito.'
         } else {
-            git.createBranch(env.GIT_BRANCH,'release-v' + env.VERSION_EXCUTE, env.VERSION_EXCUTE)
+            git.createBranch('develop','release-v' + env.VERSION_EXCUTE, env.VERSION_EXCUTE)
             println 'Rama creada con éxito.'
         }
     }else{

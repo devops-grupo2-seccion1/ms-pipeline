@@ -14,14 +14,11 @@ def deleteBranch(String branch){
 }
 
 def createBranch(String origin, String newBranch, String tag){
-	sh '''
-		git fetch -p 
-		git checkout '''+origin+'''; git pull
-		git checkout -b '''+newBranch+'''
-		git push origin '''+newBranch+'''
-		git checkout '''+origin+'''; git pull
-		git branch -d '''+newBranch+'''
-	'''
+	sh "cd ${env.WORKSPACE}"
+	sh "git checkout ${origin}"
+	sh "git pull origin ${origin}"
+	sh "git checkout -b ${newBranch}"
+	sh "git push origin ${newBranch}"
 }
 
 def createPullRequest(String origin, String branch){
