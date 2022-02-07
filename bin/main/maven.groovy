@@ -88,12 +88,6 @@ def gitCreateRelease(){
             git.createBranch(env.GIT_BRANCH,'release-v' + env.VERSION_EXCUTE, env.VERSION_EXCUTE)
             println 'Rama creada con éxito.'
         }
-    }else if(env.GIT_BRANCH.contains('feature')){
-        sh "cd ${env.WORKSPACE}"
-        sh "git checkout develop"
-        sh "git pull"
-        sh "git merge ${env.GIT_BRANCH}"
-        sh "git push origin develop"
     }else{
         println "La rama ${env.GIT_BRANCH} no corresponde como rama de orígen para la creación de un Release."
     }
