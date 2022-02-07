@@ -3,7 +3,7 @@ import pipeline.*
 def call(String chosenStages){
     def utils  = new test.UtilMethods()
     //def pipelineStages = (utils.isCIorCD().contains('CI')) ? ['compile','unitTest','jar','sonar','nexusUpload'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
-    def pipelineStages = (utils.isCIorCD().contains('CI')) ? ['nexusDownload'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
+    def pipelineStages = (utils.isCIorCD().contains('CI')) ? ['nexusDownload', 'runArtefact', 'test'] : ['gitDiff','nexusDownload','runArtefact','test', 'gitMergeMaster', 'gitMergeDevelop', 'gitTagMaster'] 
     def stages = utils.getValidatedStages(chosenStages, pipelineStages)
 
     env.PIPELINE_INTEGRATIONS = utils.isCIorCD();
@@ -118,7 +118,11 @@ def nexusDownload(){
 }
 
 def runArtefact(){
-    sh 'nohup bash java -jar DevOpsUsach2020-0.0.1.jar & >/dev/null'
+    pom = readMavenPom(file: 'pom.xml')
+    def src = GIT_BRANCH.split("\\/")
+    def folder = src[0]
+    def rama = src[1]
+    sh "nohup bash java -jar ${pom.artifactId}-${rama}-${pom.version}.jar & >/dev/null"
     sleep 20
 }
 
