@@ -73,8 +73,8 @@ def test(){
 }
 
 def gitMergeMaster(){
-    sh "git checkout ${env.GIT_BRANCH}"
-    sh "git pull ${env.GIT_BRANCH}"
+    echo env.GIT_CHECKOUT_DIR
+    sh "cd ${env.GIT_CHECKOUT_DIR}"
 }
 
 def gitMergeDevelop(){
